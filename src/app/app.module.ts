@@ -23,6 +23,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProductsHeaderComponent } from './pages/home/components/products-header/products-header.component';
 import { FiltersComponent } from './pages/home/components/filters/filters.component';
 import { ProductCardComponent } from './pages/home/components/product-card/product-card.component';
+import { CartComponent } from './pages/cart/cart.component';
+import {CartService} from "./services/cart.service";
+import {StoreService} from "./services/store.service";
+import { HttpClientModule} from "@angular/common/http";
 
 
 
@@ -33,7 +37,8 @@ import { ProductCardComponent } from './pages/home/components/product-card/produ
     HomeComponent,
     ProductsHeaderComponent,
     FiltersComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
@@ -52,8 +57,9 @@ import { ProductCardComponent } from './pages/home/components/product-card/produ
     MatTableModule,
     MatBadgeModule,
     MatSnackBarModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [CartService, StoreService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
