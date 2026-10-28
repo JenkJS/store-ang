@@ -3,9 +3,10 @@ import {StoreService} from "../../../../services/store.service";
 import {Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-filters',
-  templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.css']
+    selector: 'app-filters',
+    templateUrl: './filters.component.html',
+    styleUrls: ['./filters.component.css'],
+    standalone: false
 })
 export class FiltersComponent implements OnInit, OnDestroy{
   @Output() showCategory = new EventEmitter<string>()

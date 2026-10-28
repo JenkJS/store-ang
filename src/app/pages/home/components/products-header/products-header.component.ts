@@ -1,9 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-products-header',
-  templateUrl: './products-header.component.html',
-  styleUrls: ['./products-header.component.css'],
+    selector: 'app-products-header',
+    templateUrl: './products-header.component.html',
+    styleUrls: ['./products-header.component.css'],
+    standalone: false
 })
 export class ProductsHeaderComponent implements OnInit {
   @Output() columnsCountChange = new EventEmitter<number>();

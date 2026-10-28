@@ -3,9 +3,10 @@ import { Cart, CartItem } from '../../models/cart.model';
 import { CartService } from '../../services/cart.service';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    standalone: false
 })
 export class HeaderComponent {
   private _cart: Cart = {

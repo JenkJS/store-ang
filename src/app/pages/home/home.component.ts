@@ -8,9 +8,10 @@ const ROWS_HEIGHT: { [id: number]:number } = {
   1: 400, 3: 335, 4: 350,
 };
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    standalone: false
 })
 
 export class HomeComponent implements OnInit, OnDestroy {
