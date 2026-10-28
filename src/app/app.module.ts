@@ -24,35 +24,39 @@ import { ProductsHeaderComponent } from './pages/home/components/products-header
 import { FiltersComponent } from './pages/home/components/filters/filters.component';
 import { ProductCardComponent } from './pages/home/components/product-card/product-card.component';
 import { CartComponent } from './pages/cart/cart.component';
-import {CartService} from "./services/cart.service";
-import {StoreService} from "./services/store.service";
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { CartService } from './services/cart.service';
+import { StoreService } from './services/store.service';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
-
-
-@NgModule({ declarations: [
-        AppComponent,
-        HeaderComponent,
-        HomeComponent,
-        ProductsHeaderComponent,
-        FiltersComponent,
-        ProductCardComponent,
-        CartComponent
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatSidenavModule,
-        MatGridListModule,
-        MatMenuModule,
-        MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatExpansionModule,
-        MatTreeModule,
-        MatListModule,
-        MatToolbarModule,
-        MatTableModule,
-        MatBadgeModule,
-        MatSnackBarModule], providers: [CartService, StoreService, provideHttpClient(withInterceptorsFromDi())] })
-export class AppModule { }
+@NgModule({
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    HomeComponent,
+    ProductsHeaderComponent,
+    FiltersComponent,
+    ProductCardComponent,
+    CartComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatGridListModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatExpansionModule,
+    MatTreeModule,
+    MatListModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatBadgeModule,
+    MatSnackBarModule,
+  ],
+  providers: [CartService, StoreService, provideHttpClient(withXhr(), withInterceptorsFromDi())],
+})
+export class AppModule {}

@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Cart, CartItem } from '../../models/cart.model';
 import { CartService } from '../../services/cart.service';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.css'],
-    standalone: false
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class HeaderComponent {
   private _cart: Cart = {
@@ -22,7 +23,7 @@ export class HeaderComponent {
     this._cart = cart;
     this.itemsQuantity = cart.items
       .map((item) => item.quantity)
-      .reduce((prev, current) => (prev + current), 0);
+      .reduce((prev, current) => prev + current, 0);
   }
 
   constructor(private cartService: CartService) {}

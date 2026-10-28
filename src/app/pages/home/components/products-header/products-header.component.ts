@@ -1,10 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-    selector: 'app-products-header',
-    templateUrl: './products-header.component.html',
-    styleUrls: ['./products-header.component.css'],
-    standalone: false
+  selector: 'app-products-header',
+  templateUrl: './products-header.component.html',
+  styleUrls: ['./products-header.component.css'],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  standalone: false,
 })
 export class ProductsHeaderComponent implements OnInit {
   @Output() columnsCountChange = new EventEmitter<number>();
@@ -19,11 +20,11 @@ export class ProductsHeaderComponent implements OnInit {
   ngOnInit() {}
   onSortUpdated(newSort: string): void {
     this.sort = newSort;
-    this.sortChange.emit(newSort)
+    this.sortChange.emit(newSort);
   }
   onItemsUpdated(newCount: number): void {
     this.itemsShowCount = newCount;
-    this.itemsCountChange.emit(newCount)
+    this.itemsCountChange.emit(newCount);
   }
 
   onColumnsUpdated(colsNum: number): void {
