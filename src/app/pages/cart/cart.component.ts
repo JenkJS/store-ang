@@ -5,13 +5,57 @@ import { HttpClient } from '@angular/common/http';
 import { loadStripe } from '@stripe/stripe-js';
 import * as constants from 'constants';
 import { Constants } from '../../constants';
+import { NgIf, CurrencyPipe } from '@angular/common';
+import { MatCard } from '@angular/material/card';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    NgIf,
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatButton,
+    RouterLink,
+    MatIconButton,
+    MatIcon,
+    MatMiniFabButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    CurrencyPipe,
+  ],
 })
 export class CartComponent implements OnInit {
   cart: Cart = {

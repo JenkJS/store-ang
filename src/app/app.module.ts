@@ -29,15 +29,7 @@ import { StoreService } from './services/store.service';
 import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    HomeComponent,
-    ProductsHeaderComponent,
-    FiltersComponent,
-    ProductCardComponent,
-    CartComponent,
-  ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
@@ -56,6 +48,12 @@ import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/com
     MatTableModule,
     MatBadgeModule,
     MatSnackBarModule,
+    HeaderComponent,
+    HomeComponent,
+    ProductsHeaderComponent,
+    FiltersComponent,
+    ProductCardComponent,
+    CartComponent,
   ],
   providers: [CartService, StoreService, provideHttpClient(withXhr(), withInterceptorsFromDi())],
 })

@@ -3,6 +3,12 @@ import { CartService } from '../../services/cart.service';
 import { Product } from '../../models/product.module';
 import { Subscription } from 'rxjs';
 import { StoreService } from '../../services/store.service';
+import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
+import { FiltersComponent } from './components/filters/filters.component';
+import { ProductsHeaderComponent } from './components/products-header/products-header.component';
+import { MatGridList, MatGridTile } from '@angular/material/grid-list';
+import { NgFor } from '@angular/common';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 
 const ROWS_HEIGHT: { [id: number]: number } = {
   1: 400,
@@ -14,7 +20,17 @@ const ROWS_HEIGHT: { [id: number]: number } = {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  standalone: false,
+  imports: [
+    MatDrawerContainer,
+    MatDrawer,
+    FiltersComponent,
+    MatDrawerContent,
+    ProductsHeaderComponent,
+    MatGridList,
+    NgFor,
+    MatGridTile,
+    ProductCardComponent,
+  ],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   cols = 3;
