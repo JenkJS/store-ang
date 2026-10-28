@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Cart, CartItem } from '../../models/cart.model';
 import {CartService} from "../../services/cart.service";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {loadStripe} from "@stripe/stripe-js";
 import * as constants from "constants";
 import {Constants} from "../../constants";
