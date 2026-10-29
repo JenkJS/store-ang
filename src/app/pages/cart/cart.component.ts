@@ -1,79 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-import { Cart, CartItem } from '../../models/cart.model';
-import {CartService} from "../../services/cart.service";
-import {HttpClient} from "@angular/common/http";
-import {loadStripe} from "@stripe/stripe-js";
-import * as constants from "constants";
-import {Constants} from "../../constants";
+import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { CartItem } from '../../models/cart.model';
+import { CartService } from '../../services/cart.service';
+import { CurrencyPipe } from '@angular/common';
+import { MatCard } from '@angular/material/card';
+import {
+  MatTable,
+  MatColumnDef,
+  MatHeaderCellDef,
+  MatHeaderCell,
+  MatCellDef,
+  MatCell,
+  MatFooterCellDef,
+  MatFooterCell,
+  MatHeaderRowDef,
+  MatHeaderRow,
+  MatRowDef,
+  MatRow,
+  MatFooterRowDef,
+  MatFooterRow,
+} from '@angular/material/table';
+import { MatButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { CheckoutService } from '../../services/checkout.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatCard,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatCellDef,
+    MatCell,
+    MatFooterCellDef,
+    MatFooterCell,
+    MatButton,
+    RouterLink,
+    MatIconButton,
+    MatIcon,
+    MatMiniFabButton,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatFooterRowDef,
+    MatFooterRow,
+    CurrencyPipe,
+  ],
 })
-export class CartComponent implements OnInit {
-  cart: Cart = {
-    items: [
-      {
-        product: 'https://via.placeholder.com/150',
-        name: 'Shoes',
-        price: 150,
-        quantity: 2,
-        id: 1,
-      }, {
-        product: 'https://via.placeholder.com/150',
-        name: 'Shoes',
-        price: 350,
-        quantity: 1,
-        id: 2,
-      },
-    ],
-  };
-  dataSource: Array<CartItem> = [];
-  displayedColumns: Array<string> = [
-    'product',
-    'name',
-    'price',
-    'quantity',
-    'total',
-    'action'
-  ];
-  constructor(private cartService: CartService, private http:HttpClient) {}
-  ngOnInit() {
-    this.dataSource = this.cart.items;
-    this.cartService.cart.subscribe((_cart)=>{
-      this.cart=_cart
-      this.dataSource = this.cart.items
-    })
+export class CartComponent {
+  private readonly cartService: CartService = inject(CartService);
+  private readonly checkoutService = inject(CheckoutService);
+  readonly cart = this.cartService.cart;
+  readonly dataSource = computed(() => this.cart().items);
+  readonly total = computed(() => this.cartService.getTotal(this.cart().items));
+  readonly displayedColumns = ['product', 'name', 'price', 'quantity', 'total', 'action'];
+
+  onClearCart(): void {
+    this.cartService.onClearCart();
   }
 
-  getTotal(items: Array<CartItem>): number {
-    return this.cartService.getTotal(items)
-  }
-  onClearCart():void{
-    this.cartService.onClearCart()
+  onRemoveItem(item: CartItem): void {
+    this.cartService.removeFromCart(item);
   }
 
-  onRemoveItem(item:CartItem):void{
-      this.cartService.removeFromCart(item);
-  };
-
-  onAddQuantity(item:CartItem):void{
-    this.cartService.addToCart(item)
+  onAddQuantity(item: CartItem): void {
+    this.cartService.addToCart(item);
   }
-  onRemoveQuantity(item:CartItem):void{
-    this.cartService.removeQuantity(item)
+  onRemoveQuantity(item: CartItem): void {
+    this.cartService.removeQuantity(item);
   }
 
-  onCheckout():void{
-  this.http.post(`${Constants.SERVER_URL}/checkout`,{
-    items: this.cart.items
-  }).subscribe(async (res: any)=>{
-    let stripe = await loadStripe(Constants.STRIPE_KEY);
-    stripe?.redirectToCheckout({
-      sessionId: res.id
-    })
-  })
+  async onCheckout(): Promise<void> {
+    await this.checkoutService.checkout(this.cart().items);
   }
-
 }
