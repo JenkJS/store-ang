@@ -2,7 +2,7 @@
     <div
     class="w-full max-w-7xl mx-auto flex items-center justify-between"
   >
-  <a routerLink="home">Store</a>
+  <a routerLink="/home">Store</a>
   <button mat-icon-button [mat-menu-trigger-for]="menu">
     <mat-icon [matBadge]="itemsQuantity()" [matBadgeHidden]="!itemsQuantity()" matBadgeColor="warn"
       >shopping_bag</mat-icon
@@ -13,7 +13,7 @@
     <div class="p-3 divide-y divide-solid">
       <div class="pb-3 flex justify-between">
         <span class="mr-16">{{ itemsQuantity() }} Items</span>
-        <a routerLink="cart">View Cart</a>
+        <a routerLink="/cart">View Cart</a>
       </div>
       @if (cart().items.length) {
         <div class="py-3">
@@ -31,7 +31,7 @@
       </div>
       <div class="pt-3 flex justify-between">
         <button (click)="onClearCart()"><mat-icon>delete</mat-icon></button>
-        <button routerLink="cart"><mat-icon>shopping_cart</mat-icon></button>
+        <button routerLink="/cart"><mat-icon>shopping_cart</mat-icon></button>
       </div>
     </div>
   </mat-menu>

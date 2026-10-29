@@ -16,11 +16,11 @@ export const routes: Routes = [
         path: 'cart',
         component: CartComponent,
       },
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
     ],
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
   },
 ];
