@@ -1,13 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { Product } from '../../../../models/product.module';
-import { NgIf, NgClass, CurrencyPipe } from '@angular/common';
+import { NgClass, CurrencyPipe } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 
@@ -15,17 +8,15 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [NgIf, MatCard, NgClass, MatIcon, CurrencyPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatCard, NgClass, MatIcon, CurrencyPipe],
 })
-export class ProductCardComponent implements OnInit {
-  @Input() fullWidthMode = false;
-  @Input() product: Product | undefined;
-  @Output() addToCart = new EventEmitter();
-  constructor() {}
-  ngOnInit() {}
+export class ProductCardComponent {
+  readonly product = input.required<Product>();
+  readonly fullWidthMode = input(false);
+  readonly addToCart = output<Product>();
 
   onAddToCart(): void {
-    this.addToCart.emit(this.product);
+    this.addToCart.emit(this.product());
   }
 }

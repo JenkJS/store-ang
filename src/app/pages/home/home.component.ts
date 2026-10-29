@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { Product } from '../../models/product.module';
-import { Subscription } from 'rxjs';
 import { StoreService } from '../../services/store.service';
 import { MatDrawerContainer, MatDrawer, MatDrawerContent } from '@angular/material/sidenav';
 import { FiltersComponent } from './components/filters/filters.component';
 import { ProductsHeaderComponent } from './components/products-header/products-header.component';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { NgFor } from '@angular/common';
 import { ProductCardComponent } from './components/product-card/product-card.component';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
 
 const ROWS_HEIGHT: { [id: number]: number } = {
   1: 400,
@@ -19,7 +19,7 @@ const ROWS_HEIGHT: { [id: number]: number } = {
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatDrawerContainer,
     MatDrawer,
@@ -27,48 +27,42 @@ const ROWS_HEIGHT: { [id: number]: number } = {
     MatDrawerContent,
     ProductsHeaderComponent,
     MatGridList,
-    NgFor,
     MatGridTile,
     ProductCardComponent,
   ],
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  cols = 3;
+export class HomeComponent {
+  private readonly cartServices = inject(CartService);
+  private readonly storeService = inject(StoreService);
 
-  rowHeight = ROWS_HEIGHT[this.cols];
+  readonly cols = signal(3);
+  readonly category = signal<string | undefined>(undefined);
+  readonly sort = signal('desc');
+  readonly countLimit = signal(12);
 
-  category: string | undefined;
+  readonly rowHeight = computed(() => ROWS_HEIGHT[this.cols()]);
 
-  products: Array<Product> | undefined;
+  private readonly query = computed(() => ({
+    limit: this.countLimit(),
+    sort: this.sort(),
+    category: this.category(),
+  }));
 
-  sort = 'desc';
-
-  countLimit = 12;
-
-  productsSubscription: Subscription | undefined;
-
-  constructor(private cartServices: CartService, private storeService: StoreService) {}
-
-  ngOnInit() {
-    this.getProducts();
-  }
-
-  getProducts(): void {
-    this.productsSubscription = this.storeService
-      .getAllProducts(this.countLimit, this.sort, this.category)
-      .subscribe((_products) => {
-        this.products = _products;
-      });
-  }
+  readonly products = toSignal(
+    toObservable(this.query).pipe(
+      switchMap(({ limit, sort, category }) =>
+        this.storeService.getAllProducts(limit, sort, category),
+      ),
+    ),
+    { initialValue: [] },
+  );
 
   onColumnsCountChange(colCount: number): void {
-    this.cols = colCount;
-    this.rowHeight = ROWS_HEIGHT[this.cols];
+    this.cols.set(colCount);
   }
 
   onShowCategory(category: string): void {
-    this.category = category;
-    this.getProducts();
+    this.category.set(category);
   }
 
   onAddToCart(product: Product): void {
@@ -82,18 +76,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onItemsCountChange(count: number): void {
-    this.countLimit = count;
-    this.getProducts();
+    this.countLimit.set(count);
   }
 
   onSortChange(desc: string): void {
-    this.sort = desc;
-    this.getProducts();
-  }
-
-  ngOnDestroy() {
-    if (this.productsSubscription) {
-      this.productsSubscription.unsubscribe();
-    }
+    this.sort.set(desc);
   }
 }
