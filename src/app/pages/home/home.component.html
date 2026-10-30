@@ -1,8 +1,21 @@
-<mat-drawer-container class="min-h-full max-w-7xl mx-auto border-x" [autosize]="true">
-  <mat-drawer mode="side" opened class="p-6">
-    <app-filters (showCategory)="onShowCategory($event)"></app-filters>
+<mat-drawer-container class="home-shell" [autosize]="true">
+  <mat-drawer
+    #drawer
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    class="filters-drawer"
+  >
+    <app-filters (showCategory)="onShowCategory($event, drawer)" />
   </mat-drawer>
-  <mat-drawer-content class="p-6">
+
+  <mat-drawer-content class="p-3 sm:p-4 lg:p-6">
+    @if (isMobile()) {
+      <button type="button" mat-stroked-button class="mb-3 w-full" (click)="drawer.open()">
+        <mat-icon>filter_list</mat-icon>
+        Filters
+      </button>
+    }
+
     <app-products-header
       (columnsCountChange)="onColumnsCountChange($event)"
       (sortChange)="onSortChange($event)"
@@ -16,8 +29,8 @@
             [product]="product"
             (addToCart)="onAddToCart($event)"
             class="w-full"
-            [fullWidthMode]="cols() === 1"
-          ></app-product-card>
+            [fullWidthMode]="cols() === 1 && !isMobile()"
+          />
         </mat-grid-tile>
       }
     </mat-grid-list>

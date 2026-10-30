@@ -1,12 +1,12 @@
-<mat-card [ngClass]="{ 'text-center': !fullWidthMode() }">
-  <div class="p-4" [ngClass]="{ flex: fullWidthMode() }">
+<mat-card class="product-card" [ngClass]="{ 'text-center': !fullWidthMode() }">
+  <div class="p-3 sm:p-4" [ngClass]="{ flex: fullWidthMode() }">
     <img
-      class="mb-1 mx-auto h-[200px]"
+      class="product-image mb-1 mx-auto"
       [ngClass]="{ 'h-[200px]': !fullWidthMode(), 'h-[360px]': fullWidthMode() }"
       [src]="product().image"
       [alt]="product().title"
     />
-    <div class="w-full" [ngClass]="{ 'px-8 flex-col justify-between': fullWidthMode() }">
+    <div class="w-full" [ngClass]="{ 'px-4 lg:px-8 flex-col justify-between': fullWidthMode() }">
       <div>
         <h5>{{ product().category }}</h5>
         <p class="truncate hover:whitespace-normal">{{ product().title }}</p>

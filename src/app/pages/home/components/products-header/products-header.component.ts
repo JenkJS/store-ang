@@ -19,7 +19,6 @@ export class ProductsHeaderComponent {
   readonly sort = signal('desc');
   readonly itemsShowCount = signal(12);
 
-  constructor() {}
   onSortUpdated(newSort: string): void {
     this.sort.set(newSort);
     this.sortChange.emit(newSort);

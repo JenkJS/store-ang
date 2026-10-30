@@ -5,7 +5,7 @@
     </mat-expansion-panel-header>
     <mat-selection-list [multiple]="false">
       @for (category of categories(); track category) {
-        <mat-list-option value="category">
+        <mat-list-option [value]="category">
           <button type="button" (click)="onShowCategory(category)">
             {{ category | uppercase }}
           </button>

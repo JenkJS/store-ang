@@ -7,5 +7,17 @@ html,
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-    height: 100dvh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}
+
+.cart-menu-panel.mat-mdc-menu-panel {
+  width: min(22rem, calc(100vw - 2rem));
+  min-width: min(22rem, calc(100vw - 2rem));
+  max-width: min(22rem, calc(100vw - 2rem));
+  overflow-x: hidden;
 }
