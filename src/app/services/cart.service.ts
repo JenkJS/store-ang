@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Cart, CartItem } from '../models/cart.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -7,12 +7,24 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class CartService {
   private readonly snackBar = inject(MatSnackBar);
-
   private readonly cartState = signal<Cart>({
     items: [],
   });
 
   readonly cart = this.cartState.asReadonly();
+  readonly items = computed(()=> this.cart().items)
+  readonly itemsQuantity = computed(() =>
+    this.items().reduce((total, item) => total + item.quantity, 0),
+  );
+
+readonly total = computed(() =>
+  this.items().reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  ),
+);
+
+readonly isEmpty = computed(() => this.items().length === 0);
 
   addToCart(item: CartItem): void {
     this.cartState.update((cart) => {
@@ -33,12 +45,6 @@ export class CartService {
     });
 
     this.snackBar.open('1 item added to cart', 'OK', { duration: 3000 });
-  }
-
-  getTotal(items: Array<CartItem>): number {
-    return items
-      .map((item) => item.price * item.quantity)
-      .reduce((prev, current) => prev + current, 0);
   }
 
   removeFromCart(item: CartItem): void {

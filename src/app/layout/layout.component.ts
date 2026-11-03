@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CartService } from '../services/cart.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 
@@ -11,6 +10,4 @@ import { HeaderComponent } from '../components/header/header.component';
   imports: [HeaderComponent, RouterOutlet],
 })
 export class LayoutComponent {
-  private readonly cartService = inject(CartService);
-  readonly cart = this.cartService.cart;
 }

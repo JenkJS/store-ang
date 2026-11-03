@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, input, computed } from '@angular/core';
-import { Cart } from '../../models/cart.model';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
@@ -28,13 +27,9 @@ import { CurrencyPipe } from '@angular/common';
 export class HeaderComponent {
   private readonly cartService: CartService = inject(CartService);
 
-  readonly cart = input.required<Cart>();
-
-  readonly itemsQuantity = computed(() =>
-    this.cart().items.reduce((total, item) => total + item.quantity, 0),
-  );
-
-  readonly total = computed(() => this.cartService.getTotal(this.cart().items));
+  readonly cart = this.cartService.cart
+  readonly itemsQuantity = this.cartService.itemsQuantity;
+  readonly total = this.cartService.total;
 
   onClearCart(): void {
     this.cartService.onClearCart();

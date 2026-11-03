@@ -11,7 +11,8 @@ import { ProductsHeaderComponent } from './components/products-header/products-h
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { map, switchMap } from 'rxjs';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { catchError, defer, finalize, map, of, switchMap } from 'rxjs';
 
 const ROWS_HEIGHT: { [id: number]: number } = {
   1: 420,
@@ -35,6 +36,7 @@ const ROWS_HEIGHT: { [id: number]: number } = {
     ProductCardComponent,
     MatButton,
     MatIcon,
+    MatProgressSpinner
   ],
 })
 export class HomeComponent {
@@ -46,6 +48,8 @@ export class HomeComponent {
   readonly category = signal<string | undefined>(undefined);
   readonly sort = signal('desc');
   readonly countLimit = signal(12);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
 
   readonly isMobile = toSignal(
     this.breakpointObserver.observe('(max-width: 767px)').pipe(map(({ matches }) => matches)),
@@ -79,15 +83,26 @@ export class HomeComponent {
     category: this.category(),
   }));
 
-  readonly products = toSignal(
-    toObservable(this.query).pipe(
-      switchMap(({ limit, sort, category }) =>
-        this.storeService.getAllProducts(limit, sort, category),
-      ),
+readonly products = toSignal(
+  toObservable(this.query).pipe(
+    switchMap(({ limit, sort, category }) =>
+       defer(() => {
+        this.loading.set(true);
+        this.error.set(null);
+     return  this.storeService.getAllProducts(limit, sort, category).pipe(
+        catchError(() => {
+          this.error.set("Sorry, couldn't load products");
+          return of([]);
+        }),
+        finalize(() => {
+          this.loading.set(false);
+        }),
+      );
+    }),
     ),
-    { initialValue: [] },
-  );
-
+  ),
+  { initialValue: [] },
+);
   onColumnsCountChange(colCount: number): void {
     this.selectedCols.set(colCount);
   }
